@@ -1,13 +1,8 @@
-import './App.css'
+import "./App.css";
+import SignUp from "./components/Sign/SignUp";
 
 function App() {
-  
-
-  return (
-    <div className="App">
-      Vite APP
-    </div>
-  )
+  return <SignUp/>;
 }
 
-export default App
+export default App;
