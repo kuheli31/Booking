@@ -1,83 +1,117 @@
-import { Disclosure, DisclosureButton, DisclosurePanel, Menu, MenuButton, MenuItem, MenuItems } from '@headlessui/react'
-import { Bars3Icon, BellIcon, XMarkIcon } from '@heroicons/react/24/outline'
+import {
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from '@headlessui/react'
+import {
+  Bars3Icon,
+  BellIcon,
+  XMarkIcon,
+} from '@heroicons/react/24/outline'
+import { NavLink } from 'react-router-dom'
 
 const navigation = [
-  { name: 'Home', href: '#', current: true },
-  { name: 'Appointments', href: '#', current: false },
-  { name: 'Availability', href: '#', current: false },
-  { name: 'Chat', href: '#', current: false },
-  { name: 'Profile', href: '#', current: false },
+  { name: 'Dashboard', href: '/doctor/dashboard' },
+  { name: 'Appointments', href: '/doctor/appointments' },
+  { name: 'Availability', href: '/doctor/availability' },
+  { name: 'Chat', href: '/doctor/chats' },
+  { name: 'Profile', href: '/doctor/profile' },
 ]
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ')
 }
 
-export default function Example() {
+export default function Navbar() {
   return (
     <Disclosure
       as="nav"
       className="relative bg-sky-800/50 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10"
     >
-      {/* 🔥 Removed mx-auto and max-w-7xl */}
       <div className="w-full px-6">
         <div className="relative flex h-16 items-center justify-between">
-          
-          {/* Mobile button */}
+
+          {/* Mobile menu button */}
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
-            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-400 hover:bg-white/5 hover:text-white">
+            <DisclosureButton className="group relative inline-flex items-center justify-center rounded-md p-2 text-gray-200 hover:bg-white/5 hover:text-white">
               <Bars3Icon className="block size-6 group-data-open:hidden" />
               <XMarkIcon className="hidden size-6 group-data-open:block" />
             </DisclosureButton>
           </div>
 
-          {/*  Fixed justify-left */}
+          {/* Desktop Navigation */}
           <div className="flex flex-1 items-center justify-start">
             <div className="hidden sm:ml-6 sm:block">
               <div className="flex space-x-4">
                 {navigation.map((item) => (
-                  <a
+                  <NavLink
                     key={item.name}
-                    href={item.href}
-                    aria-current={item.current ? 'page' : undefined}
-                    className={classNames(
-                      item.current
-                        ? 'bg-gray-950/50 text-white'
-                        : 'text-gray-300 hover:bg-white/5 hover:text-white',
-                      'rounded-md px-3 py-2 text-lg font-medium',
-                    )}
+                    to={item.href}
+                    end
+                    className={({ isActive }) =>
+                      classNames(
+                        isActive
+                          ? 'bg-gray-950/60 text-white'
+                          : 'text-gray-200 hover:bg-white/5 hover:text-white',
+                        'rounded-md px-3 py-2 text-lg font-medium transition'
+                      )
+                    }
                   >
                     {item.name}
-                  </a>
+                  </NavLink>
                 ))}
               </div>
             </div>
           </div>
 
-          {/* Right side icons */}
+          {/* Right Side Icons */}
           <div className="absolute inset-y-0 right-0 flex items-center pr-2 sm:static sm:ml-6 sm:pr-0">
-            <button className="relative rounded-full p-1 text-gray-400 hover:text-white">
+
+            {/* Notification */}
+            <button className="relative rounded-full p-1 text-gray-200 hover:text-white">
               <BellIcon className="size-6" />
             </button>
 
+            {/* Profile Dropdown */}
             <Menu as="div" className="relative ml-3">
               <MenuButton className="relative flex rounded-full">
                 <img
                   src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
-                  className="size-8 rounded-full"
+                  alt="Profile"
+                  className="size-10 rounded-full object-cover"
                 />
               </MenuButton>
 
-              <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-800 py-1">
+              <MenuItems className="absolute right-0 z-10 mt-2 w-48 origin-top-right rounded-md bg-gray-800 py-1 shadow-lg ring-1 ring-black/5 focus:outline-none">
                 <MenuItem>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-300">
-                    Settings
-                  </a>
+                  {({ active }) => (
+                    <NavLink
+                      to="/doctor/profile"
+                      className={classNames(
+                        active && 'bg-gray-700',
+                        'block px-4 py-2 text-sm text-gray-300'
+                      )}
+                    >
+                      Your Profile
+                    </NavLink>
+                  )}
                 </MenuItem>
+
                 <MenuItem>
-                  <a href="#" className="block px-4 py-2 text-sm text-gray-300">
-                    Sign out
-                  </a>
+                  {({ active }) => (
+                    <button
+                      className={classNames(
+                        active && 'bg-gray-700',
+                        'block w-full text-left px-4 py-2 text-sm text-gray-300'
+                      )}
+                    >
+                      Sign out
+                    </button>
+                  )}
                 </MenuItem>
               </MenuItems>
             </Menu>
@@ -85,23 +119,25 @@ export default function Example() {
         </div>
       </div>
 
-      {/* Mobile menu */}
+      {/* Mobile Navigation */}
       <DisclosurePanel className="sm:hidden">
         <div className="space-y-1 px-2 pt-2 pb-3">
           {navigation.map((item) => (
-            <DisclosureButton
+            <NavLink
               key={item.name}
-              as="a"
-              href={item.href}
-              className={classNames(
-                item.current
-                  ? 'bg-gray-950/50 text-white'
-                  : 'text-gray-300 hover:bg-white/5 hover:text-white',
-                'block rounded-md px-3 py-2 text-base font-medium',
-              )}
+              to={item.href}
+              end
+              className={({ isActive }) =>
+                classNames(
+                  isActive
+                    ? 'bg-gray-950/60 text-white'
+                    : 'text-gray-300 hover:bg-white/5 hover:text-white',
+                  'block rounded-md px-3 py-2 text-base font-medium transition'
+                )
+              }
             >
               {item.name}
-            </DisclosureButton>
+            </NavLink>
           ))}
         </div>
       </DisclosurePanel>
