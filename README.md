@@ -1,0 +1,2 @@
+Frontend:-
+installed -> vite , tailwind
