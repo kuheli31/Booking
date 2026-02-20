@@ -1,8 +1,13 @@
 import React from 'react'
+import { NavLink } from 'react-router-dom'
 
 const PatProfile = () => {
   return (
-    <div>PatProfile</div>
+    <div>
+      <NavLink to="/patient/profile">
+        Profile
+      </NavLink>
+    </div>
   )
 }
 

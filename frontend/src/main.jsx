@@ -16,15 +16,25 @@ import DoctorLayout from './layouts/DoctorLayout'
 import Avail from './components/Doctor/Availability/Avail.jsx'
 import DocChat from './components/Chats/DoctorChat/DocChat.jsx'
 import DocProfile from './components/Profile/DoctorProfile/DocProfile.jsx'
+import PatientLayout from './layouts/PatientLayout'
+import PatAppoint from './components/Patient/Appointments/PatAppoint.jsx'
+import Records from './components/Patient/Records/Records.jsx'
+import Chat from './components/Patient/Chats/Chat.jsx'
+import PatProfile from './components/Profile/PatientProfile/PatProfile.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <>
       <Route path="/" element={<SignUp />} />
 
-      <Route path="/patient/dashboard" element={<PatientDashboard />} />
+      <Route path='/patient' element={<PatientLayout />}>     
+        <Route path="dashboard" element={<PatientDashboard />} />
+        <Route path="appointments" element={<PatAppoint/>} />
+        <Route path="records" element={<Records/>} />
+        <Route path='chats' element={<Chat/>}/>
+        <Route path='profile' element={<PatProfile/>}/>
+      </Route> 
 
-      {/* ✅ Doctor Layout with nested routes */}
       <Route path="/doctor" element={<DoctorLayout />}>
         <Route path="dashboard" element={<DoctorDashboard />} />
         <Route path="appointments" element={<Appointment />} />
