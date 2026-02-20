@@ -21,7 +21,7 @@ import {
 import { NavLink } from 'react-router-dom'
 
 const navigation = [
-  { name: 'Dashboard', href: '/patient/dashboard' },
+  { name: 'Home', href: '/patient/dashboard' },
   { name: 'Appointments', href: '/patient/appointments' },
   { name: 'Medical Records', href: '/patient/records' },
   { name: 'Chat', href: '/patient/chats' },

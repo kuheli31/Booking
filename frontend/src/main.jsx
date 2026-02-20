@@ -21,6 +21,9 @@ import PatAppoint from './components/Patient/Appointments/PatAppoint.jsx'
 import Records from './components/Patient/Records/Records.jsx'
 import Chat from './components/Patient/Chats/Chat.jsx'
 import PatProfile from './components/Profile/PatientProfile/PatProfile.jsx'
+import Upcoming from './components/Dashboards/Patient/Upcoming.jsx'
+import AppointHistory from './components/Patient/Appointments/AppointHistory.jsx'
+
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -28,8 +31,8 @@ const router = createBrowserRouter(
       <Route path="/" element={<SignUp />} />
 
       <Route path='/patient' element={<PatientLayout />}>     
-        <Route path="dashboard" element={<PatientDashboard />} />
-        <Route path="appointments" element={<PatAppoint/>} />
+        <Route path="dashboard" element={<Upcoming />} />
+        <Route path="appointments" element={<AppointHistory/>} />
         <Route path="records" element={<Records/>} />
         <Route path='chats' element={<Chat/>}/>
         <Route path='profile' element={<PatProfile/>}/>
