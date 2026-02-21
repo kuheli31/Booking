@@ -1,4 +1,5 @@
 import patients from "./Profile/PatientProfile/ProfileDesignPatient";
+import doctors from "./Profile/DoctorProfile/ProfileDesignDoctor";
 
 const statusList = ["Completed", "Pending", "Confirmed", "Cancelled"];
 
@@ -13,21 +14,29 @@ const timeSlots = [
 let appointmentId = 1;
 
 const TimeStatus = patients.flatMap((patient) =>
-  patient.records.map((record, index) => ({
-    appointmentId: appointmentId++,
+  patient.records.map((record, index) => {
 
-    patientId: patient.id,
-    recordId: record.id,   // ✅ ADD THIS
+    // ✅ find doctor using name
+    const matchedDoctor = doctors.find(
+      (doc) => doc.name === record.doctor
+    );
 
-    doctorId: patient.doctorId[index],
+    return {
+      appointmentId: appointmentId++,
 
-    doctorName: record.doctor,
-    specialization: record.specialization,
-    date: record.date,
+      patientId: patient.id,
+      recordId: record.id,
 
-    time: timeSlots[index % timeSlots.length],
-    status: statusList[index % statusList.length]
-  }))
+      doctorId: matchedDoctor?.id || null,
+
+      doctorName: record.doctor,
+      specialization: record.specialization,
+      date: record.date,
+
+      time: timeSlots[index % timeSlots.length],
+      status: statusList[index % statusList.length]
+    };
+  })
 );
 
 export default TimeStatus;

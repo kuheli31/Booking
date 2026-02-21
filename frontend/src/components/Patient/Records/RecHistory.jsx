@@ -16,7 +16,7 @@ function RecHistory(props)
   return (
     <div style={cardStyle}>
 
-        <NavLink to={`/doctor/profile/${props.id}`}>
+        <NavLink to={`/patient/appointments/${props.id}`}>
         <h2 style={{ marginBottom: '15px', fontSize: '24px', fontWeight: 'bold', color: '#1e40af' }}>
             {props.name}
         </h2>
@@ -25,7 +25,6 @@ function RecHistory(props)
         <p><strong>Specialization:</strong> {props.specialization}</p>
         <p><strong>Diagnosis:</strong> {props.diagonosis}</p>
         <p><strong>Notes:</strong> {props.notes}</p>
-        {/* ✅ Added Download Section */}
         <h4><strong>Download Reports & Prescriptions👇</strong></h4>
 
         {props.files?.map((file,index)=>(
