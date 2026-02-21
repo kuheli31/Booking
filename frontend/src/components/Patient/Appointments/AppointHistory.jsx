@@ -3,31 +3,34 @@ import PatAppoint from './PatAppoint'
 import patients from "../../Profile/PatientProfile/ProfileDesignPatient";
 import { usePatient } from '../../../context/Patient/PatientContext';
 import TimeStatus from '../../TimeStatus';
-
+import doctors from "../../Profile/DoctorProfile/ProfileDesignDoctor";
 const AppointHistory = () => {
 const currentPatient = usePatient();
   const [filter, setFilter] = useState("All")
 
   const historyData =
-  currentPatient?.records.map((rec) => {
+currentPatient?.records.map((rec) => {
 
-    const appointment = TimeStatus.find(
-      t =>
-        t.patientId === currentPatient.id &&
-        t.recordId === rec.id
-    );
+  const appointment = TimeStatus.find(
+    t =>
+      t.patientId === currentPatient.id &&
+      t.recordId === rec.id
+  );
 
-    return {
-      id: rec.id,
-      doctorId: appointment?.doctorId,
-      name: rec.doctor,
-      specialization: rec.specialization,
-      date: rec.date,
-      time: appointment?.time || "N/A",
-      status: appointment?.status || "Completed"
-    };
-  }) || [];
+  const doctor = doctors.find(
+    d => d.id === appointment?.doctorId
+  );
 
+  return {
+    id: rec.id,
+    doctorId: appointment?.doctorId,
+    name: doctor?.name || rec.doctor,
+    specialization:doctor?.specialization || rec.specialization,
+    date: rec.date,
+    time: appointment?.time || "N/A",
+    status: appointment?.status || "Completed"
+  };
+}) || [];
   // Filter logic
   const filteredData =
     filter === "All"
