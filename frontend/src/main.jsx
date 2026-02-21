@@ -8,6 +8,7 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 
+import DoctorViewProfile from './components/Profile/DoctorProfile/DoctorViewProfile.jsx'
 import SignUp from './components/Sign/SignUp.jsx'
 import PatientDashboard from './components/Dashboards/Patient/PatientDashboard.jsx'
 import DoctorDashboard from './components/Dashboards/Doctor/DoctorDashboard.jsx'
@@ -23,6 +24,9 @@ import Chat from './components/Patient/Chats/Chat.jsx'
 import PatProfile from './components/Profile/PatientProfile/PatProfile.jsx'
 import Upcoming from './components/Dashboards/Patient/Upcoming.jsx'
 import AppointHistory from './components/Patient/Appointments/AppointHistory.jsx'
+import { PatientProvider } from './context/Patient/PatientContext.jsx'
+import { DoctorProvider } from './context/Doctor/DoctorContext.jsx'
+import PatientViewProfile from './components/Profile/PatientProfile/PatientViewProfile.jsx'
 
 
 const router = createBrowserRouter(
@@ -35,7 +39,8 @@ const router = createBrowserRouter(
         <Route path="appointments" element={<AppointHistory/>} />
         <Route path="records" element={<Records/>} />
         <Route path='chats' element={<Chat/>}/>
-        <Route path='profile' element={<PatProfile/>}/>
+        <Route path='profile' element={<PatientViewProfile />}/>
+        <Route path="appointments/:id"  element={<DocProfile />} />
       </Route> 
 
       <Route path="/doctor" element={<DoctorLayout />}>
@@ -43,7 +48,9 @@ const router = createBrowserRouter(
         <Route path="appointments" element={<Appointment />} />
         <Route path="availability" element={<Avail />} />
         <Route path='chats' element={<DocChat />} />
-        <Route path='profile' element={<DocProfile />} />
+        <Route path='profile' element={<DoctorViewProfile />}/>
+        <Route path="appointments/:id"  element={<PatProfile />} 
+/>
       </Route>
     </>
   )
@@ -51,6 +58,10 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router} />
+    <DoctorProvider>
+      <PatientProvider>
+        <RouterProvider router={router} />
+      </PatientProvider>
+    </DoctorProvider>
   </StrictMode>
 )

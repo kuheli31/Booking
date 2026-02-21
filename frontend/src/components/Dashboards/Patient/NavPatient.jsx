@@ -10,7 +10,7 @@ import {
   PopoverButton,
   PopoverPanel,
 } from '@headlessui/react'
-
+import { usePatient } from '../../../context/Patient/PatientContext'
 import {
   Bars3Icon,
   BellIcon,
@@ -19,7 +19,7 @@ import {
 } from '@heroicons/react/24/outline'
 
 import { NavLink } from 'react-router-dom'
-
+import patient from '../../Profile/PatientProfile/ProfileDesignPatient'
 const navigation = [
   { name: 'Home', href: '/patient/dashboard' },
   { name: 'Appointments', href: '/patient/appointments' },
@@ -33,6 +33,7 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+  const selectedPatient = usePatient();
   return (
     <Disclosure
       as="nav"
@@ -155,7 +156,7 @@ export default function Navbar() {
             <Menu as="div" className="relative ml-3">
               <MenuButton className="relative flex rounded-full">
                 <img
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+                  src={selectedPatient?.profilePicture}
                   alt="Profile"
                   className="size-10 rounded-full object-cover"
                 />

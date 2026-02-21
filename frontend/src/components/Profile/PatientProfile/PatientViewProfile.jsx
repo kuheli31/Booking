@@ -3,14 +3,9 @@ import { Link } from 'react-router-dom'
 import { usePatient } from '../../../context/Patient/PatientContext'
 import { useParams } from "react-router-dom";
 import patients from "./ProfileDesignPatient";
-const PatProfile = () => {
+const PatientViewProfile = () => {
 
- const { id } = useParams();
-
-const selectedPatient = patients.find(
-  p => p.id === Number(id)
-);
-
+const selectedPatient = usePatient();
   if (!selectedPatient) {
     return <h2>No Patient Found</h2>;
   }
@@ -138,4 +133,4 @@ const selectedPatient = patients.find(
   )
 }
 
-export default PatProfile
+export default PatientViewProfile

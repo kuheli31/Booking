@@ -13,6 +13,7 @@ import {
   XMarkIcon,
 } from '@heroicons/react/24/outline'
 import { NavLink } from 'react-router-dom'
+import { useDoctor } from '../../../context/Doctor/DoctorContext'
 
 const navigation = [
   { name: 'Dashboard', href: '/doctor/dashboard' },
@@ -27,13 +28,14 @@ function classNames(...classes) {
 }
 
 export default function Navbar() {
+    const selectedDoctor = useDoctor();
   return (
     <Disclosure
       as="nav"
       className="relative bg-sky-800/50 after:pointer-events-none after:absolute after:inset-x-0 after:bottom-0 after:h-px after:bg-white/10"
     >
       <div className="w-full px-6">
-        <div className="relative flex h-16 items-center justify-between">
+        <div className="relative flex h-20 items-center justify-between">
 
           {/* Mobile menu button */}
           <div className="absolute inset-y-0 left-0 flex items-center sm:hidden">
@@ -57,7 +59,7 @@ export default function Navbar() {
                         isActive
                           ? 'bg-gray-950/60 text-white'
                           : 'text-gray-200 hover:bg-white/5 hover:text-white',
-                        'rounded-md px-3 py-2 text-lg font-medium transition'
+                        'rounded-md px-3 py-2 text-2xl font-medium transition'
                       )
                     }
                   >
@@ -80,7 +82,7 @@ export default function Navbar() {
             <Menu as="div" className="relative ml-3">
               <MenuButton className="relative flex rounded-full">
                 <img
-                  src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e"
+                  src={selectedDoctor.profilePicture}
                   alt="Profile"
                   className="size-10 rounded-full object-cover"
                 />

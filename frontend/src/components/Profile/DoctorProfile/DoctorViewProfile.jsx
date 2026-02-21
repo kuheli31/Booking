@@ -1,16 +1,13 @@
 import React from 'react'
-import { useParams } from "react-router-dom";
-import doctors from "./ProfileDesignDoctor";
+import { useDoctor } from '../../../context/Doctor/DoctorContext'
 
-const DocProfile = () => {
+const DoctorViewProfile = () => {
 
-  const { id } = useParams();
+  const selectedDoctor = useDoctor();
 
-  const selectedDoctor =
-    doctors.find(doc => doc.id === Number(id));
-
-  if (!selectedDoctor)
+  if (!selectedDoctor) {
     return <h2>No Doctor Found</h2>;
+  }
 
   /* ---------- CONTAINER ---------- */
   const containerStyle = {
@@ -112,6 +109,7 @@ const DocProfile = () => {
           Professional Information
         </h2>
 
+
         <div style={rowStyle}>
           <span style={labelStyle}>Experience</span>
           <span style={valueStyle}>
@@ -150,7 +148,7 @@ const DocProfile = () => {
       </div>
 
     </div>
-  );
-};
+  )
+}
 
-export default DocProfile;
+export default DoctorViewProfile

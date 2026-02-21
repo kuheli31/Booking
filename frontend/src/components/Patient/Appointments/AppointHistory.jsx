@@ -1,36 +1,32 @@
 import React, { useState } from 'react'
 import PatAppoint from './PatAppoint'
+import patients from "../../Profile/PatientProfile/ProfileDesignPatient";
+import { usePatient } from '../../../context/Patient/PatientContext';
+import TimeStatus from '../../TimeStatus';
 
 const AppointHistory = () => {
-
+const currentPatient = usePatient();
   const [filter, setFilter] = useState("All")
 
-  const historyData = [
-    {
-      id: 1,
-      name: "Dr. Brown",
-      status: "Completed",
-      specialization: "Orthopedics",
-      date: "2024-06-10",
-      time: "11:00 AM"
-    },
-    {
-      id: 2,
-      name: "Dr. Wilson",
-      status: "Completed",
-      specialization: "Cardiology",
-      date: "2024-05-22",
-      time: "3:30 PM"
-    },
-    {
-      id: 3,
-      name: "Dr. Taylor",
-      status: "Cancelled",
-      specialization: "Dermatology",
-      date: "2024-04-18",
-      time: "1:00 PM"
-    }
-  ]
+  const historyData =
+  currentPatient?.records.map((rec) => {
+
+    const appointment = TimeStatus.find(
+      t =>
+        t.patientId === currentPatient.id &&
+        t.recordId === rec.id
+    );
+
+    return {
+      id: rec.id,
+      doctorId: appointment?.doctorId,
+      name: rec.doctor,
+      specialization: rec.specialization,
+      date: rec.date,
+      time: appointment?.time || "N/A",
+      status: appointment?.status || "Completed"
+    };
+  }) || [];
 
   // Filter logic
   const filteredData =
@@ -73,17 +69,18 @@ const AppointHistory = () => {
           gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
           gap: '20px'
         }}
-      >
+     >
         {filteredData.length > 0 ? (
           filteredData.map((appointment) => (
             <PatAppoint
-              key={appointment.id}
-              name={appointment.name}
-              status={appointment.status}
-              specialization={appointment.specialization}
-              date={appointment.date}
-              time={appointment.time}
-            />
+            key={appointment.id}
+            doctorId={appointment.doctorId}
+            name={appointment.name}
+            status={appointment.status}
+            specialization={appointment.specialization}
+            date={appointment.date}
+            time={appointment.time}
+/>
           ))
         ) : (
           <p>No appointments found.</p>
