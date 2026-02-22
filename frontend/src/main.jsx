@@ -8,6 +8,7 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 
+import DoctorPatientViewProfile from './components/Profile/DoctorProfile/DoctorPatientViewProfile.jsx'
 import DoctorViewProfile from './components/Profile/DoctorProfile/DoctorViewProfile.jsx'
 import SignUp from './components/Sign/SignUp.jsx'
 import PatientDashboard from './components/Dashboards/Patient/PatientDashboard.jsx'
@@ -49,8 +50,8 @@ const router = createBrowserRouter(
         <Route path="availability" element={<Avail />} />
         <Route path='chats' element={<DoctorChat/>} />
         <Route path='profile' element={<DoctorViewProfile />}/>
-        <Route path="appointments/:id"  element={<PatProfile />} />
-        <Route path="patient/:id" element={<PatientViewProfile />} />
+        <Route path="appointments/:id"  element={<PatProfile />} />     
+        <Route path="patient/:id" element={<DoctorPatientViewProfile />} />
       </Route>
     </>
   )
