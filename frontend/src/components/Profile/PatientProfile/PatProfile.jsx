@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom'
 import { usePatient } from '../../../context/Patient/PatientContext'
 import { useParams } from "react-router-dom";
 import patients from "./ProfileDesignPatient";
+import { Button } from '@headlessui/react';
+
 const PatProfile = () => {
 
  const { id } = useParams();
@@ -82,7 +84,7 @@ const selectedPatient = patients.find(
       <div style={profileCard}>
 
         <h2 style={{ marginBottom: "20px", fontSize: "30px", fontWeight: "700", color: "#1f2937" }}>
-          My Profile
+          Patient Profile
         </h2>
 
         {/* ✅ CENTERED IMAGE */}
@@ -125,13 +127,18 @@ const selectedPatient = patients.find(
           <span style={valueStyle}>{selectedPatient.address}</span>
         </div>
 
-        <Link
-          to="/patient/records"
-          className="mt-4 inline-block bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition"
-        >
-          View Medical Records
-        </Link>
+        <div className="mt-4 flex justify-between items-center w-full max-w-md">
+  <Link
+    to="/patient/records"
+    className="bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition"
+  >
+    View Medical Records
+  </Link>
 
+  <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold px-4 py-2 rounded">
+    Chat
+  </Button>
+</div>
       </div>
 
     </div>

@@ -2,6 +2,7 @@ import React from "react";
 import { useParams } from "react-router-dom";
 import doctors from "../../Profile/DoctorProfile/ProfileDesignDoctor";
 import patients from "../../Profile/PatientProfile/ProfileDesignPatient";
+import { Button } from '@headlessui/react';
 
 const DoctorFromPatientRecords = () => {
   const { patientId, doctorId } = useParams();
@@ -79,7 +80,14 @@ const DoctorFromPatientRecords = () => {
 
         <div style={{ marginTop: "30px" }}>
           <p><strong>Viewing from Patient:</strong> {patient.name}</p>
+          <br />
+          <div className="flex justify-center">
+            <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+              Chat
+            </Button>
+          </div>
         </div>
+        
       </div>
     </div>
   );

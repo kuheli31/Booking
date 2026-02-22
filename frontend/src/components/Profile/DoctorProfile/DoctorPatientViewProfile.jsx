@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link, useParams } from 'react-router-dom';
 import patients from "../PatientProfile/ProfileDesignPatient";
+import { Button } from '@headlessui/react';
 
 const DoctorPatientViewProfile = () => {
 
@@ -116,12 +117,18 @@ const DoctorPatientViewProfile = () => {
           <span style={valueStyle}>{selectedPatient.address}</span>
         </div>
 
-        <Link
-          to={`/doctor/patient/${id}/records`}
-          className="mt-4 inline-block bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition"
-        >
-          View Medical Records
-        </Link>
+        <div className="mt-4 flex justify-between items-center">
+  <Link
+    to={`/doctor/patient/${id}/records`}
+    className="bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition"
+  >
+    View Medical Records
+  </Link>
+
+  <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+    Chat
+  </Button>
+</div>
       </div>
 
     </div>
