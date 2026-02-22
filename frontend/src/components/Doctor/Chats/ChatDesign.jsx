@@ -3,28 +3,24 @@ import { Camera, Phone, MoreVertical, Paperclip } from "lucide-react";
 import React, { useState, useRef, useEffect, useMemo } from "react";
 import { NavLink } from "react-router-dom";
 
-import  doctor  from "../../Profile/DoctorProfile/ProfileDesignDoctor"
+import patient from "../../Profile/PatientProfile/ProfileDesignPatient";
 import CameraModal from "./CameraModal";
 import CallModal from "./CallModal";
 import VideoCallModal from "./VideoCallModal";
 
+// Doctor → Patient Chat
 const ChatDesign = () => {
 
-  // 🔥 Replace this with actual logged-in patient id (context / auth later)
-  const loggedInPatientId = 2;
-
-  // ✅ Filter doctors linked to this patient
+  // ✅ Doctor can access all patients (since no doctorID mapping exists)
   const contacts = useMemo(() => {
-    return doctor.filter(doc =>
-      doc.patientID.includes(loggedInPatientId)
-    );
-  }, [loggedInPatientId]);
+    return patient || [];
+  }, []);
 
   // ✅ Initialize chats dynamically
   const [chats, setChats] = useState(() => {
     const initialChats = {};
-    contacts.forEach(doc => {
-      initialChats[doc.id] = [];
+    contacts.forEach(pat => {
+      initialChats[pat.id] = [];
     });
     return initialChats;
   });
@@ -34,7 +30,6 @@ const ChatDesign = () => {
   );
 
   const [input, setInput] = useState("");
-
   const [showCamera, setShowCamera] = useState(false);
   const [showCall, setShowCall] = useState(false);
   const [showVideoCall, setShowVideoCall] = useState(false);
@@ -68,7 +63,7 @@ const ChatDesign = () => {
     setInput("");
   };
 
-  const activeDoctor = contacts.find(d => d.id === activeChat);
+  const activePatient = contacts.find(pat => pat.id === activeChat);
 
   return (
     <div className="flex h-screen overflow-hidden bg-gray-100">
@@ -84,29 +79,29 @@ const ChatDesign = () => {
         <div className="flex-1 overflow-y-auto p-3 space-y-2">
           {contacts.length === 0 && (
             <p className="text-gray-500 text-sm">
-              No doctors assigned yet.
+              No Patients available.
             </p>
           )}
 
-          {contacts.map((doc) => (
+          {contacts.map((pat) => (
             <div
-              key={doc.id}
-              onClick={() => setActiveChat(doc.id)}
+              key={pat.id}
+              onClick={() => setActiveChat(pat.id)}
               className={`flex items-center cursor-pointer p-2 rounded-md ${
-                activeChat === doc.id
+                activeChat === pat.id
                   ? "bg-indigo-100"
                   : "hover:bg-gray-100"
               }`}
             >
               <img
-                src={doc.profilePicture}
-                alt={doc.name}
+                src={pat.profilePicture}
+                alt={pat.name}
                 className="w-10 h-10 rounded-full object-cover mr-3"
               />
               <div>
-                <h2 className="font-semibold">{doc.name}</h2>
+                <h2 className="font-semibold">{pat.name}</h2>
                 <p className="text-sm text-gray-500 truncate w-40">
-                  {chats[doc.id]?.slice(-1)[0]?.text || "No messages yet"}
+                  {chats[pat.id]?.slice(-1)[0]?.text || "No messages yet"}
                 </p>
               </div>
             </div>
@@ -119,11 +114,11 @@ const ChatDesign = () => {
 
         {/* Chat Header */}
         <header className="bg-white p-4 border-b flex justify-between items-center">
-          {activeDoctor ? (
+          {activePatient ? (
             <>
-              <NavLink to="/doctor/profile">
+              <NavLink to={`/doctor/patient/${activePatient.id}`}>
                 <h1 className="text-xl font-semibold hover:text-indigo-600 cursor-pointer">
-                  {activeDoctor.name}
+                  {activePatient.name}
                 </h1>
               </NavLink>
 
@@ -146,7 +141,7 @@ const ChatDesign = () => {
               </div>
             </>
           ) : (
-            <p className="text-gray-500">Select a doctor to start chatting</p>
+            <p className="text-gray-500">Select a patient to start chatting</p>
           )}
         </header>
 
@@ -185,7 +180,7 @@ const ChatDesign = () => {
         </div>
 
         {/* Chat Input */}
-        {activeDoctor && (
+        {activePatient && (
           <footer className="bg-white border-t p-4">
             <div className="flex items-center gap-3">
               <Paperclip className="w-5 h-5 text-gray-600 cursor-pointer" />
@@ -220,18 +215,18 @@ const ChatDesign = () => {
         <CameraModal onClose={() => setShowCamera(false)} />
       )}
 
-      {showCall && activeDoctor && (
+      {showCall && activePatient && (
         <CallModal
-          person={activeDoctor.name}
+          person={activePatient.name}
           accepted={callAccepted}
           onAccept={() => setCallAccepted(true)}
           onDecline={() => setShowCall(false)}
         />
       )}
 
-      {showVideoCall && activeDoctor && (
+      {showVideoCall && activePatient && (
         <VideoCallModal
-          person={activeDoctor.name}
+          person={activePatient.name}
           accepted={callAccepted}
           onAccept={() => setCallAccepted(true)}
           onDecline={() => setShowVideoCall(false)}

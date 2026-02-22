@@ -27,7 +27,7 @@ import AppointHistory from './components/Patient/Appointments/AppointHistory.jsx
 import { PatientProvider } from './context/Patient/PatientContext.jsx'
 import { DoctorProvider } from './context/Doctor/DoctorContext.jsx'
 import PatientViewProfile from './components/Profile/PatientProfile/PatientViewProfile.jsx'
-
+import DoctorChat from './components/Doctor/Chats/DoctorChat.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -47,10 +47,10 @@ const router = createBrowserRouter(
         <Route path="dashboard" element={<DoctorDashboard />} />
         <Route path="appointments" element={<Appointment />} />
         <Route path="availability" element={<Avail />} />
-        <Route path='chats' element={<DocChat />} />
+        <Route path='chats' element={<DoctorChat/>} />
         <Route path='profile' element={<DoctorViewProfile />}/>
-        <Route path="appointments/:id"  element={<PatProfile />} 
-/>
+        <Route path="appointments/:id"  element={<PatProfile />} />
+        <Route path="patient/:id" element={<PatientViewProfile />} />
       </Route>
     </>
   )
