@@ -4,7 +4,7 @@ import patient from "../../components/Profile/PatientProfile/ProfileDesignPatien
 const PatientContext= createContext()
 
 export const PatientProvider=({children})=>{
-    const logInPatientId = 2;
+    const logInPatientId = 6;
 
     const selectedPatient = patient.find(p => p.id === logInPatientId);
 
