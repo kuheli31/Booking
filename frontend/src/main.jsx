@@ -8,6 +8,8 @@ import {
   RouterProvider,
 } from 'react-router-dom'
 
+import DoctorPatientRecords from './components/Profile/DoctorProfile/DoctorPatientRecords.jsx'
+import PatientDoctorViewProfile from './components/Profile/PatientProfile/PatientDoctorViewProfile.jsx';
 import DoctorPatientViewProfile from './components/Profile/DoctorProfile/DoctorPatientViewProfile.jsx'
 import DoctorViewProfile from './components/Profile/DoctorProfile/DoctorViewProfile.jsx'
 import SignUp from './components/Sign/SignUp.jsx'
@@ -29,6 +31,7 @@ import { PatientProvider } from './context/Patient/PatientContext.jsx'
 import { DoctorProvider } from './context/Doctor/DoctorContext.jsx'
 import PatientViewProfile from './components/Profile/PatientProfile/PatientViewProfile.jsx'
 import DoctorChat from './components/Doctor/Chats/DoctorChat.jsx'
+import DoctorFromPatientRecords from './components/Profile/DoctorProfile/DoctorFromPatientRecords.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -42,6 +45,7 @@ const router = createBrowserRouter(
         <Route path='chats' element={<Chat/>}/>
         <Route path='profile' element={<PatientViewProfile />}/>
         <Route path="appointments/:id"  element={<DocProfile />} />
+        <Route path="doctor/:id" element={<PatientDoctorViewProfile />} />
       </Route> 
 
       <Route path="/doctor" element={<DoctorLayout />}>
@@ -52,6 +56,8 @@ const router = createBrowserRouter(
         <Route path='profile' element={<DoctorViewProfile />}/>
         <Route path="appointments/:id"  element={<PatProfile />} />     
         <Route path="patient/:id" element={<DoctorPatientViewProfile />} />
+        <Route path="patient/:id/records" element={<DoctorPatientRecords />} />
+         <Route path="patient/:patientId/records/doctor/:doctorId" element={<DoctorFromPatientRecords />} />
       </Route>
     </>
   )

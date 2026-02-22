@@ -121,7 +121,7 @@ const ChatDesign = () => {
         <header className="bg-white p-4 border-b flex justify-between items-center">
           {activeDoctor ? (
             <>
-              <NavLink to="/doctor/profile">
+              <NavLink to={`/patient/doctor/${activeDoctor.id}`}>
                 <h1 className="text-xl font-semibold hover:text-indigo-600 cursor-pointer">
                   {activeDoctor.name}
                 </h1>
