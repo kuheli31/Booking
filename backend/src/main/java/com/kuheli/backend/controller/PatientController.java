@@ -1,14 +1,20 @@
 package com.kuheli.backend.controller;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import com.kuheli.backend.model.Records;
+import com.kuheli.backend.service.RecordService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+
 
 @RestController
 @RequestMapping("/patient")
 public class PatientController {
-    @GetMapping("/appointments")
-    public String getAppointments()
-    {
-        return "All Appointments";
+    @Autowired
+    private RecordService recordService;
+
+    @GetMapping("/{patientId}/records")
+    public List<Records> getPatientRecords(@PathVariable Long patientId) {
+        return recordService.getRecordsByPatientId(patientId);
     }
 }

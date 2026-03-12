@@ -24,7 +24,7 @@ import PatientLayout from './layouts/PatientLayout'
 import PatAppoint from './components/Patient/Appointments/PatAppoint.jsx'
 import Records from './components/Patient/Records/Records.jsx'
 import Chat from './components/Patient/Chats/Chat.jsx'
-import PatProfile from './components/Profile/PatientProfile/PatProfile.jsx'
+import PatProfile from './components/Profile/PatientProfile/DoctorViewPatientProfile.jsx'
 import Upcoming from './components/Dashboards/Patient/Upcoming.jsx'
 import AppointHistory from './components/Patient/Appointments/AppointHistory.jsx'
 import { PatientProvider } from './context/Patient/PatientContext.jsx'
@@ -32,6 +32,7 @@ import { DoctorProvider } from './context/Doctor/DoctorContext.jsx'
 import PatientViewProfile from './components/Profile/PatientProfile/PatientViewProfile.jsx'
 import DoctorChat from './components/Doctor/Chats/DoctorChat.jsx'
 import DoctorFromPatientRecords from './components/Profile/DoctorProfile/DoctorFromPatientRecords.jsx'
+import { SearchProvider } from './context/Search/SearchContext.jsx'
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -65,10 +66,12 @@ const router = createBrowserRouter(
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
+    <SearchProvider>
     <DoctorProvider>
       <PatientProvider>
         <RouterProvider router={router} />
       </PatientProvider>
     </DoctorProvider>
+    </SearchProvider>
   </StrictMode>
 )

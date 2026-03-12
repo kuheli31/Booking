@@ -129,7 +129,7 @@ const selectedPatient = patients.find(
 
         <div className="mt-4 flex justify-between items-center w-full max-w-md">
   <Link
-    to="/patient/records"
+    to={`/doctor/patient/${selectedPatient.id}/records`}
     className="bg-sky-600 text-white px-4 py-2 rounded-md hover:bg-sky-700 transition"
   >
     View Medical Records
