@@ -1,9 +1,47 @@
-// DoctorDashboard.jsx
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import History from './History';
 import Today from './Today';
 
 const DoctorDashboard = () => {
+
+  const [appointments, setAppointments] = useState([]);
+  const [todayAppointments, setTodayAppointments] = useState([]);
+
+  useEffect(() => {
+
+    const API_URL = import.meta.env.VITE_SPRING_API_URL;
+
+    fetch(`${API_URL}/doctor/appointments`)
+      .then(res => res.json())
+      .then(data => {
+
+        setAppointments(data);
+
+        const today = new Date().toISOString().split("T")[0];
+
+        const todayData = data.filter(a => a.date === today);
+        setTodayAppointments(todayData);
+
+      })
+      .catch(err => console.error(err));
+
+  }, []);
+
+  /* --------- STATS --------- */
+
+  const totalPatients = new Set(
+    appointments.map(a => a.patient?.id)
+  ).size;
+
+  const pendingReviews = appointments.filter(
+    a => a.status === "Pending"
+  ).length;
+
+  const currentMonth = new Date().getMonth();
+  const thisMonth = appointments.filter(a => {
+    const appointmentMonth = new Date(a.date).getMonth();
+    return appointmentMonth === currentMonth;
+  }).length;
 
   const containerStyle = {
     display: 'flex',
@@ -27,23 +65,37 @@ const DoctorDashboard = () => {
 
   return (
     <div>
+
       {/* Dashboard stats */}
       <div style={containerStyle}>
-        <History num={12} name="Today's Appointments"/>
-        <History num={248} name="Total Patients"/>
-        <History num={8} name="Pending Reviews"/>
-        <History num={156} name="This Month"/>
+        <History num={todayAppointments.length} name="Today's Appointments"/>
+        <History num={totalPatients} name="Total Patients"/>
+        <History num={pendingReviews} name="Pending Reviews"/>
+        <History num={thisMonth} name="This Month"/>
       </div>
 
       {/* Today's Appointments */}
       <div style={see}>
-        <h1 className="text-2xl font-bold mt-6 mb-4">Today's Appointments</h1>
+        <h1 className="text-2xl font-bold mt-6 mb-4">
+          Today's Appointments
+        </h1>
 
-        <Today name="John Doe" time="10:00 AM" status="Confirmed"/>
-        <Today name="Jane Smith" time="11:30 AM" status="Pending"/>
-        <Today name="Michael Johnson" time="2:00 PM" status="Completed"/>
-        <Today name="Emily Davis" time="3:30 PM" status="Confirmed"/>
-        <Today name="Sophia Brown" time="4:15 PM" status="Pending"/>
+        {todayAppointments.map((item) => {
+
+          const time = new Date(`1970-01-01T${item.time}`)
+            .toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'});
+
+          return (
+            <Today
+              key={item.id}
+              name={item.patient?.name}
+              time={time}
+              status={item.status}
+              patientId={item.patient?.id}
+            />
+          );
+        })}
+
       </div>
     </div>
   );

@@ -1,15 +1,19 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import Today from "../../Dashboards/Doctor/Today";
 import { NavLink } from "react-router-dom";
-import patients from "../../Profile/PatientProfile/ProfileDesignPatient";
 
 const DocAppointment = () => {
 
-  const appointments = [
-    { patientId: 1, time: "10:00 AM", status: "Confirmed" },
-    { patientId: 2, time: "11:30 AM", status: "Pending" },
-    { patientId: 1, time: "2:00 PM", status: "Completed" },
-  ];
+  const [appointments, setAppointments] = useState([]);
+
+  useEffect(() => {
+    const API_URL = import.meta.env.VITE_SPRING_API_URL;
+
+    fetch(`${API_URL}/doctor/appointments`)
+      .then(res => res.json())
+      .then(data => setAppointments(data))
+      .catch(err => console.error(err));
+  }, []);
 
   const stats = {
     Confirmed: appointments.filter(a => a.status === "Confirmed").length,
@@ -50,27 +54,34 @@ const DocAppointment = () => {
           My Appointments
         </h1>
 
-        {appointments.map((item, idx) => {
+        {appointments.map((item) => {
 
-          const patient =
-            patients.find(p => p.id === item.patientId);
+          const formattedDate = new Date(item.date).toLocaleDateString();
+
+          const formattedTime = new Date(`1970-01-01T${item.time}`)
+            .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
 
           return (
-            <div key={idx}
+            <div
+              key={item.id}
               className="bg-white p-4 rounded-lg shadow-sm flex flex-col gap-2"
             >
 
               <Today
-                name={patient?.name}
-                time={item.time}
+                name={item.patient?.name}
+                time={formattedTime}
                 status={item.status}
               />
 
+              {/* NEW DATE DISPLAY */}
+              <p className="text-gray-600 text-sm">
+                Date: {formattedDate}
+              </p>
+
               <div className="flex gap-2">
 
-                {/* ✅ IMPORTANT FIX */}
                 <NavLink
-                  to={`/doctor/appointments/${item.patientId}`}
+                  to={`/doctor/appointments/${item.patient?.id}`}
                   className={buttonStyle}
                 >
                   View Details
@@ -81,6 +92,7 @@ const DocAppointment = () => {
                 </button>
 
               </div>
+
             </div>
           );
         })}

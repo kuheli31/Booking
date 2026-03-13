@@ -143,7 +143,7 @@ const DocProfile = () => {
 
         <div style={rowStyle}>
           <span style={labelStyle}>Ratings</span>
-          <span style={valueStyle}>
+          <span style={valueStyle}>⭐ 
             {selectedDoctor.ratings}
           </span>
         </div>

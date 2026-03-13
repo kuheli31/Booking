@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Calendar, Clock, Save } from 'lucide-react';
+import { useDoctor } from './../../../context/Doctor/DoctorContext'
 
 const Avail = () => {
   const [selectedDate, setSelectedDate] = useState(new Date().toISOString().split('T')[0]);
+  const doctor  = useDoctor();
   const [timeSlots, setTimeSlots] = useState([
     { time: '09:00', available: true },
     { time: '10:00', available: true },
@@ -20,10 +22,40 @@ const Avail = () => {
     setTimeSlots(updated);
   };
 
-  const handleSave = () => {
-    // Placeholder: Will save availability
-    alert('Availability saved successfully!');
-  };
+  const handleSave = async () => {
+
+  if (!doctor || !doctor.id) {
+    alert("Doctor data not loaded yet");
+    return;
+  }
+
+  const API_URL = import.meta.env.VITE_SPRING_API_URL;
+
+  const payload = timeSlots.map(slot => ({
+    doctor: { id: doctor.id },
+    date: selectedDate,
+    time: slot.time,
+    available: slot.available
+  }));
+
+  try {
+
+    const res = await fetch(`${API_URL}/doctor/availability`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    if(res.ok){
+      alert("Availability saved successfully!");
+    }
+
+  } catch(err){
+    console.error(err);
+  }
+};
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-gray-50 to-blue-50">

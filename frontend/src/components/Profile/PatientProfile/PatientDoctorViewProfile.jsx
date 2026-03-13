@@ -1,6 +1,7 @@
 import React from "react";
 import { useParams } from "react-router-dom";
 import doctor from "../../Profile/DoctorProfile/ProfileDesignDoctor";
+import { Button } from "@headlessui/react";
 
 const PatientDoctorViewProfile = () => {
 
@@ -115,7 +116,13 @@ const PatientDoctorViewProfile = () => {
         </div>
 
         <div style={rowStyle}>
-          <span style={labelStyle}>Address</span>
+          <span style={labelStyle}>Gender</span>
+          <span style={valueStyle}>{selectedDoctor.gender}</span>
+        </div>
+
+        
+        <div style={rowStyle}>
+          <span style={labelStyle}>Hospital</span>
           <span style={valueStyle}>{selectedDoctor.address}</span>
         </div>
 
@@ -124,6 +131,11 @@ const PatientDoctorViewProfile = () => {
           <span style={valueStyle}>⭐ {selectedDoctor.ratings}</span>
         </div>
 
+        <div className="flex justify-center">
+          <Button className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded">
+            Chat
+          </Button>
+        </div>
       </div>
 
     </div>
