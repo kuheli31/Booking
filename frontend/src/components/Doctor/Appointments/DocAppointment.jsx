@@ -6,20 +6,79 @@ const DocAppointment = () => {
 
   const [appointments, setAppointments] = useState([]);
 
-  useEffect(() => {
-    const API_URL = import.meta.env.VITE_SPRING_API_URL;
+  const [rescheduleId, setRescheduleId] = useState(null);
+  const [newDate, setNewDate] = useState("");
+  const [newTime, setNewTime] = useState("");
 
+  const API_URL = import.meta.env.VITE_SPRING_API_URL;
+
+  /* -------- FETCH APPOINTMENTS -------- */
+
+  useEffect(() => {
     fetch(`${API_URL}/doctor/appointments`)
       .then(res => res.json())
       .then(data => setAppointments(data))
-      .catch(err => console.error(err));
-  }, []);
+      .catch(err => console.error("Fetch Error:", err));
+  }, [API_URL]);
+
+  /* -------- STATS -------- */
 
   const stats = {
     Confirmed: appointments.filter(a => a.status === "Confirmed").length,
     Pending: appointments.filter(a => a.status === "Pending").length,
     Completed: appointments.filter(a => a.status === "Completed").length,
   };
+
+  /* -------- RESCHEDULE -------- */
+
+  const handleReschedule = async () => {
+
+    if (!newDate || !newTime) {
+      alert("Please select date and time");
+      return;
+    }
+
+    try {
+
+      const res = await fetch(
+        `${API_URL}/doctor/appointments/${rescheduleId}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json"
+          },
+          body: JSON.stringify({
+            date: newDate,
+            time: newTime
+          })
+        }
+      );
+
+      if (!res.ok) {
+        alert("Reschedule failed");
+        return;
+      }
+
+      const updated = appointments.map(a =>
+        a.id === rescheduleId
+          ? { ...a, date: newDate, time: newTime }
+          : a
+      );
+
+      setAppointments(updated);
+
+      setRescheduleId(null);
+      setNewDate("");
+      setNewTime("");
+
+      alert("Appointment Rescheduled Successfully");
+
+    } catch (err) {
+      console.error("Reschedule Error:", err);
+    }
+  };
+
+  /* -------- STYLES -------- */
 
   const containerStyle = {
     display: "flex",
@@ -48,20 +107,26 @@ const DocAppointment = () => {
   return (
     <div style={containerStyle}>
 
-      {/* LEFT */}
+      {/* LEFT COLUMN */}
       <div style={leftColumn}>
+
         <h1 className="text-2xl font-bold text-blue-700">
           My Appointments
         </h1>
 
         {appointments.map((item) => {
 
-          const formattedDate = new Date(item.date).toLocaleDateString();
+          const formattedDate = item.date
+            ? new Date(item.date).toLocaleDateString()
+            : "";
 
-          const formattedTime = new Date(`1970-01-01T${item.time}`)
-            .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" });
+          const formattedTime = item.time
+            ? new Date(`1970-01-01T${item.time}`)
+                .toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" })
+            : "";
 
           return (
+
             <div
               key={item.id}
               className="bg-white p-4 rounded-lg shadow-sm flex flex-col gap-2"
@@ -73,7 +138,6 @@ const DocAppointment = () => {
                 status={item.status}
               />
 
-              {/* NEW DATE DISPLAY */}
               <p className="text-gray-600 text-sm">
                 Date: {formattedDate}
               </p>
@@ -87,19 +151,71 @@ const DocAppointment = () => {
                   View Details
                 </NavLink>
 
-                <button className={buttonStyle}>
+                <button
+                  onClick={() => {
+                    setRescheduleId(item.id);
+                    setNewDate(item.date);
+                    setNewTime(item.time);
+                  }}
+                  className={buttonStyle}
+                >
                   Reschedule
                 </button>
 
               </div>
 
+              {/* RESCHEDULE FORM */}
+              {rescheduleId === item.id && (
+
+                <div className="mt-3 flex gap-2 items-center">
+
+                  <input
+                  id="reschedule-date"
+                  name="rescheduleDate"
+                    type="date"
+                    value={newDate}
+                    onChange={(e) => setNewDate(e.target.value)}
+                    className="border p-2 rounded"
+                  />
+
+                  <input
+                  id="reschedule-time"
+                  name="rescheduleTime"
+                    type="time"
+                    value={newTime}
+                    onChange={(e) => setNewTime(e.target.value)}
+                    className="border p-2 rounded"
+                  />
+
+                  <button
+                    onClick={handleReschedule}
+                    className="bg-green-500 text-white px-3 py-1 rounded"
+                  >
+                    Save
+                  </button>
+
+                  <button
+                    onClick={() => setRescheduleId(null)}
+                    className="bg-gray-400 text-white px-3 py-1 rounded"
+                  >
+                    Cancel
+                  </button>
+
+                </div>
+
+              )}
+
             </div>
+
           );
+
         })}
+
       </div>
 
-      {/* RIGHT */}
+      {/* RIGHT COLUMN */}
       <div style={rightColumn}>
+
         <div className="bg-white p-4 rounded-lg text-center">
           <h2>Confirmed</h2>
           <p>{stats.Confirmed}</p>
@@ -114,6 +230,7 @@ const DocAppointment = () => {
           <h2>Completed</h2>
           <p>{stats.Completed}</p>
         </div>
+
       </div>
 
     </div>
