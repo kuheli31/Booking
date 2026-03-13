@@ -55,9 +55,12 @@ const DocAppointment = () => {
       );
 
       if (!res.ok) {
-        alert("Reschedule failed");
-        return;
-      }
+
+  const errorText = await res.text();
+  alert(errorText);
+
+  return;
+}
 
       const updated = appointments.map(a =>
         a.id === rescheduleId

@@ -7,6 +7,7 @@ import com.kuheli.backend.repository.AvailabilityRepository;
 import com.kuheli.backend.service.AppointmentsService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -45,7 +46,7 @@ public class DoctorController {
     /* -------- RESCHEDULE APPOINTMENT -------- */
 
     @PutMapping("/appointments/{id}")
-    public Appointments rescheduleAppointment(
+    public ResponseEntity<?> rescheduleAppointment(
             @PathVariable Long id,
             @RequestBody Appointments updatedAppointment) {
 
@@ -53,10 +54,28 @@ public class DoctorController {
                 .findById(id)
                 .orElseThrow(() -> new RuntimeException("Appointment not found"));
 
+        // 🔍 CHECK IF SLOT ALREADY EXISTS
+        boolean exists = appointmentRepository
+                .existsByDoctorAndDateAndTime(
+                        appointment.getDoctor(),
+                        updatedAppointment.getDate(),
+                        updatedAppointment.getTime()
+                );
+
+        if (exists) {
+            return ResponseEntity
+                    .badRequest()
+                    .body("This time slot is already booked for this doctor.");
+        }
+
+        // If free → update
         appointment.setDate(updatedAppointment.getDate());
         appointment.setTime(updatedAppointment.getTime());
+        appointment.setStatus("Confirmed");
 
-        return appointmentRepository.save(appointment);
+        appointmentRepository.save(appointment);
+
+        return ResponseEntity.ok(appointment);
     }
 
 }
